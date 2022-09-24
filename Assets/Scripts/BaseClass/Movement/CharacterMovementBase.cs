@@ -116,7 +116,7 @@ namespace UGG.Move
             
             position.Set(transform.position.x, transform.position.y - groundDetectionOffset,
                 transform.position.z);
-
+Gizmos.color=Color.red;
             Gizmos.DrawWireSphere(position, groundDetectionRang);
             
         }
