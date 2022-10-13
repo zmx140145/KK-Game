@@ -634,12 +634,19 @@ ModelImporter:
           postInfinity: 3
           rotationOrder: 4
       events:
+      - time: 0.047078293
+        functionName: OnAnimationAttackParticleEvent
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: -30
+        messageOptions: 0
       - time: 0.23121388
         functionName: OnAnimationAttackEvent
         data: Hit_D_Top
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
-        intParameter: 0
+        intParameter: 30
         messageOptions: 0
       transformMask:
       - path: 

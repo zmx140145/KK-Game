@@ -107,6 +107,15 @@ public partial class @InputController : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""14d12d91-5f4c-4a22-88f1-258c58768d67"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -351,6 +360,17 @@ public partial class @InputController : IInputActionCollection2, IDisposable
                     ""action"": ""Skill0"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0a1653d5-1c9c-4bda-8321-000004e65240"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -368,6 +388,7 @@ public partial class @InputController : IInputActionCollection2, IDisposable
         m_PlayerInput_Roll = m_PlayerInput.FindAction("Roll", throwIfNotFound: true);
         m_PlayerInput_Crouch = m_PlayerInput.FindAction("Crouch", throwIfNotFound: true);
         m_PlayerInput_Skill0 = m_PlayerInput.FindAction("Skill0", throwIfNotFound: true);
+        m_PlayerInput_Jump = m_PlayerInput.FindAction("Jump", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -436,6 +457,7 @@ public partial class @InputController : IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerInput_Roll;
     private readonly InputAction m_PlayerInput_Crouch;
     private readonly InputAction m_PlayerInput_Skill0;
+    private readonly InputAction m_PlayerInput_Jump;
     public struct PlayerInputActions
     {
         private @InputController m_Wrapper;
@@ -449,6 +471,7 @@ public partial class @InputController : IInputActionCollection2, IDisposable
         public InputAction @Roll => m_Wrapper.m_PlayerInput_Roll;
         public InputAction @Crouch => m_Wrapper.m_PlayerInput_Crouch;
         public InputAction @Skill0 => m_Wrapper.m_PlayerInput_Skill0;
+        public InputAction @Jump => m_Wrapper.m_PlayerInput_Jump;
         public InputActionMap Get() { return m_Wrapper.m_PlayerInput; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -485,6 +508,9 @@ public partial class @InputController : IInputActionCollection2, IDisposable
                 @Skill0.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill0;
                 @Skill0.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill0;
                 @Skill0.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill0;
+                @Jump.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnJump;
             }
             m_Wrapper.m_PlayerInputActionsCallbackInterface = instance;
             if (instance != null)
@@ -516,6 +542,9 @@ public partial class @InputController : IInputActionCollection2, IDisposable
                 @Skill0.started += instance.OnSkill0;
                 @Skill0.performed += instance.OnSkill0;
                 @Skill0.canceled += instance.OnSkill0;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
             }
         }
     }
@@ -531,5 +560,6 @@ public partial class @InputController : IInputActionCollection2, IDisposable
         void OnRoll(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
         void OnSkill0(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
 }

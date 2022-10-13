@@ -28,7 +28,7 @@ namespace UGG.Move
         [SerializeField,Header("移动速度")] private float runSpeed;
         [SerializeField,Header("移动速度")] private float crouchMoveSpeed;
         [SerializeField,Header("动画移动速度倍率")] private float animationMoveSpeedMult;
-        
+        [SerializeField,Header("动画跳跃速度倍率")] private float animationJumpSpeedMult;
         
         [SerializeField,Header("角色胶囊控制(下蹲)")] private Vector3 crouchCenter;
         [SerializeField] private Vector3 originCenter;
@@ -78,6 +78,7 @@ namespace UGG.Move
             UpdateCrouchAnimation();
             UpdateRollAnimation();
            UpdateSkill0Animation();
+          UpdateJumpAnimation();
             
         }
 
@@ -167,7 +168,7 @@ namespace UGG.Move
 
         private void UpdateMotionAnimation()
         {
-
+characterAnimator.SetBool(OnGroundID,isOnGround);
             if (CanRunControl())
             {
                 characterAnimator.SetFloat(movementID,_inputSystem.playerMovement.sqrMagnitude *((_inputSystem.playerRun && !isOnCrouch) ? 2f : 1f),0.25f,Time.deltaTime);
@@ -191,7 +192,7 @@ namespace UGG.Move
             }
             
         }
-//如果按下翻滚键
+          //如果按下翻滚键
         private void UpdateRollAnimation()
         {
              if(_inputSystem.playerRoll)
@@ -201,7 +202,7 @@ namespace UGG.Move
              //调用移动函数
              if(characterAnimator.CheckAnimationTag("Roll"))
              {
-               CharacterMoveInterface(transform.forward,characterAnimator.GetFloat(animationMoveID)*animationMoveSpeedMult,true);
+               CharacterMoveInterface(transform.forward,characterAnimator.GetFloat(animationMoveID)*animationMoveSpeedMult,false);
              }
              
         }
@@ -217,6 +218,21 @@ namespace UGG.Move
                 characterAnimator.SetBool(Skill0ID,false);
              }
            
+             
+        }
+         //当按下k 跳跃键
+          private void UpdateJumpAnimation()
+        {
+             if(_inputSystem.playerJump)
+             {
+                characterAnimator.SetTrigger(JumpID);
+             }
+            //调用跳跃函数
+             if(characterAnimator.CheckAnimationTag("Jump"))
+             {
+            
+               CharacterJumpInterface(transform.up,characterAnimator.GetFloat(animationJumpID)*animationJumpSpeedMult,true);
+             }
              
         }
         private void CharacterCrouchControl()

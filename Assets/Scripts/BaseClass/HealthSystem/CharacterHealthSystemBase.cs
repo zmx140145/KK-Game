@@ -64,9 +64,7 @@ namespace UGG.Health
 
         public virtual void TakeDamager(string hitAnimationName)
         {
-            Debug.Log(String.Format("攻击的名字{0}",hitAnimationName));
-            _animator.Play(hitAnimationName,0,0f);
-            GameAssets.Instance.PlaySoundEffect(_audioSource,SoundAssetsType.hit);
+           
         }
 
         public virtual void TakeDamager(float damager, string hitAnimationName)
@@ -76,7 +74,7 @@ namespace UGG.Health
 
         public virtual void TakeDamager(float damagar, string hitAnimationName, Transform attacker)
         {
-            SetAttacker(attacker);
+         
             
         }
 

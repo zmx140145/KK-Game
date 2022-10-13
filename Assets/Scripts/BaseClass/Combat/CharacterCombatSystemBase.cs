@@ -33,7 +33,12 @@ namespace UGG.Combat
             _audioSource = _characterMovementBase.GetComponentInChildren<AudioSource>();
         }
 
-
+        protected virtual void OnAnimationAttackParticleEvent(int angle)
+        {
+            Script_ATK obj= GameObject.Find("Player").GetComponent<Script_ATK>();
+            obj.SetRotationAndPlay(angle);
+                
+        }
 
 
 
@@ -43,20 +48,27 @@ namespace UGG.Combat
         /// <param name="hitName">传递受伤动画名</param>
         protected virtual void OnAnimationAttackEvent(string hitName)
         {
-           
+            //gameObject.Find("Player").SendMessage(playKnifeLight);
+            // if(hitName == "Hit_Up_Left"  )
+            //     GameObject.Find("Player").GetComponent<Script_ATK>().playKnifeLight();
+            // else if(hitName == "Hit_H_Right")
+            //     GameObject.Find("Player").GetComponent<Script_ATK2>().playKnifeLight();
+            // else if(hitName == "Hit_D_Top")
+            //     GameObject.Find("Player").GetComponent<Script_ATK3>().playKnifeLight();
+
 
             Collider[] attackDetectionTargets = new Collider[4];
 
             int counts = Physics.OverlapSphereNonAlloc(attackDetectionCenter.position, attackDetectionRang,
                 attackDetectionTargets, enemyLayer);
-
+                
             if (counts > 0)
             {
                 for (int i = 0; i < counts; i++)
                 {
                     if (attackDetectionTargets[i].TryGetComponent(out IDamagar damagar))
                     {
-                        damagar.TakeDamager(hitName);
+                        damagar.TakeDamager(0f,hitName,transform.root.transform);
                         
                     }
                 }
@@ -64,17 +76,18 @@ namespace UGG.Combat
            PlayWeaponEffect();
         }
         //播放武器音效
-     private void PlayWeaponEffect()
-     {
-if(_animator.CheckAnimationTag("Attack"))
-{
-     GameAssets.Instance.PlaySoundEffect(_audioSource,SoundAssetsType.swordWave);
-}
-if(_animator.CheckAnimationTag("GSAttack"))
-{
-     GameAssets.Instance.PlaySoundEffect(_audioSource,SoundAssetsType.hSwordWave);
-}
-     }
+        private void PlayWeaponEffect()
+        {
+            if(_animator.CheckAnimationTag("Attack"))
+            {
+                GameAssets.Instance.PlaySoundEffect(_audioSource,SoundAssetsType.swordWave);
+            }
+            if(_animator.CheckAnimationTag("GSAttack"))
+            {
+                GameAssets.Instance.PlaySoundEffect(_audioSource,SoundAssetsType.hSwordWave);
+            }
+        }
+        
         private void OnDrawGizmos()
         {
             Gizmos.DrawWireSphere(attackDetectionCenter.position, attackDetectionRang);

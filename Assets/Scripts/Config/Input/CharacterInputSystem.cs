@@ -14,7 +14,8 @@ public class CharacterInputSystem : MonoBehaviour
     {
         get{
            
-             return _inputController.PlayerInput.Movement.ReadValue<Vector2>();}
+             return _inputController.PlayerInput.Movement.ReadValue<Vector2>();
+             }
         
         
     }
@@ -56,7 +57,10 @@ public class CharacterInputSystem : MonoBehaviour
     {
         get => _inputController.PlayerInput.Skill0.IsPressed();
     }
-    
+    public bool playerJump
+    {
+        get => _inputController.PlayerInput.Jump.triggered;
+    }
     
     
     

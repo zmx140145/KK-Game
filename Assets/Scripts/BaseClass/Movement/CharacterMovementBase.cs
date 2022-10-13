@@ -35,12 +35,15 @@ namespace UGG.Move
         
         //AnimationID
         protected int animationMoveID = Animator.StringToHash("AnimationMove");
+          protected int animationJumpID = Animator.StringToHash("AnimationJump");
         protected int movementID = Animator.StringToHash("Movement");
         protected int horizontalID = Animator.StringToHash("Horizontal");
         protected int verticalID = Animator.StringToHash("Vertical");
         protected int runID = Animator.StringToHash("Run");
         protected int rollID=Animator.StringToHash("Roll");
         protected int Skill0ID=Animator.StringToHash("Skill0");
+         protected int JumpID=Animator.StringToHash("Jump");
+         protected int OnGroundID=Animator.StringToHash("OnGround");
 
         protected virtual void Awake()
         {
@@ -116,7 +119,7 @@ namespace UGG.Move
             
             position.Set(transform.position.x, transform.position.y - groundDetectionOffset,
                 transform.position.z);
-Gizmos.color=Color.red;
+            Gizmos.color=Color.red;
             Gizmos.DrawWireSphere(position, groundDetectionRang);
             
         }
@@ -144,6 +147,10 @@ Gizmos.color=Color.red;
             return Physics.Raycast(transform.position + transform.up * .5f, dir.normalized * characterAnimator.GetFloat(animationMoveID), out var hit, 1f,whatIsObs);
         }
         
+        protected bool CanAnimationJump(Vector3 dir)
+        {
+            return Physics.Raycast(transform.position + transform.up * .5f, dir.normalized * characterAnimator.GetFloat(animationJumpID), out var hit, 1f,whatIsObs);
+        }
         #endregion
 
         #region 公共函数
@@ -175,7 +182,28 @@ Gizmos.color=Color.red;
                     * verticalDirection);
             }
         }
+  public virtual void CharacterJumpInterface(Vector3 moveDirection, float moveSpeed,bool useGravity)
+        {
+            if (!CanAnimationJump(moveDirection))
+            {
+                movementDirection = moveDirection.normalized;
+        
+               
 
+                if (useGravity)
+                {
+                    verticalDirection.Set(0.0f, verticalSpeed, 0.0f);
+                }
+                else
+                {
+                    verticalDirection = Vector3.zero;
+                }
+        
+                control.Move((moveSpeed * Time.deltaTime)
+                    * movementDirection.normalized + Time.deltaTime
+                    * verticalDirection);
+            }
+        }
         #endregion
         
         
