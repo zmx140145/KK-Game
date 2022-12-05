@@ -7,13 +7,13 @@ using UGG.Move;
 
 public abstract class ConditionSO : ScriptableObject
 {
-    //引用
+    //锟斤拷锟斤拷
     protected AICombatSystem _combatSystem;
     protected AIMovement _movement;
     protected AIHealthSystem _healthSystem;
     protected Animator animator;
 
-    [SerializeField] protected int priority;//条件优先级
+    [SerializeField] protected int priority;
 
 
 
@@ -28,11 +28,8 @@ public abstract class ConditionSO : ScriptableObject
         animator = stateSystem.GetComponentInChildren<Animator>();
     }
 
-    public abstract bool ConditionSetUp();//条件是否成立
+    public abstract bool ConditionSetUp();
 
-    /// <summary>
-    /// 获取当前条件的优先级
-    /// </summary>
-    /// <returns></returns>
+    
     public int GetConditionPriority() => priority;
 }

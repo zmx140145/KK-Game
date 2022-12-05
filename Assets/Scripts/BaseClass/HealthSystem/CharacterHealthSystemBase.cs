@@ -7,7 +7,7 @@ namespace UGG.Health
 {
     public abstract class CharacterHealthSystemBase : MonoBehaviour, IDamagar
     {
-        
+  
         //引用
         protected Animator _animator;
         protected CharacterMovementBase _movement;
@@ -19,7 +19,7 @@ namespace UGG.Health
         
         //AnimationID
         protected int animationMove = Animator.StringToHash("AnimationMove");
-        
+        protected int parryID = Animator.StringToHash("Parry");
         //HitAnimationMoveSpeedMult
         public float hitAnimationMoveMult;
 
@@ -51,7 +51,7 @@ namespace UGG.Health
 
         protected virtual void HitAnimaitonMove()
         {
-            if(!_animator.CheckAnimationTag("Hit")) return;
+            if(_animator.CheckAnimationTag("Hit")||_animator.CheckAnimationTag("ParryHit"))
             _movement.CharacterMoveInterface(transform.forward,_animator.GetFloat(animationMove) * hitAnimationMoveMult,true);
         }
 
@@ -77,7 +77,11 @@ namespace UGG.Health
          
             
         }
-
+        //处决
+        public virtual void OnExecute(Transform attacker)
+        {
+           
+        }
         #endregion
         
         

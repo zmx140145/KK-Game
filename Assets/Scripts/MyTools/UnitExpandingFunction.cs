@@ -44,4 +44,20 @@ public static class UnitExpandingFunction
         
         return  Quaternion.Lerp(self.rotation,newRotation,lerpTime * Time.deltaTime);
     }
+    public static bool CheckCurrentTagAnimationIsInTime(this Animator animator,string tagName,float time)
+    {
+    if(animator.CheckAnimationTag(tagName))
+    {
+        return (animator.GetCurrentAnimatorStateInfo(0).normalizedTime<time)?true:false;
+    }
+    return false;
+    }
+     public static bool CheckCurrentTagAnimationIsOverTime(this Animator animator,string tagName,float time)
+    {
+    if(animator.CheckAnimationTag(tagName))
+    {
+        return (animator.GetCurrentAnimatorStateInfo(0).normalizedTime>time)?true:false;
+    }
+    return false;
+    }
 }

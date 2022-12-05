@@ -5,6 +5,7 @@ namespace UGG.Move
 {
     public class PlayerMovementController : CharacterMovementBase
     {
+        private bool isOutOfTarget=true;
         //引用
         [SerializeField]private CameraForKK cameraForKK;
         private Transform characterCamera;
@@ -43,7 +44,7 @@ namespace UGG.Move
         
         //animationID
         private int crouchID = Animator.StringToHash("Crouch");
-
+ private int shiftID = Animator.StringToHash("Shift");
 
         #region 内部函数
 
@@ -79,7 +80,7 @@ namespace UGG.Move
             UpdateRollAnimation();
            UpdateSkill0Animation();
           UpdateJumpAnimation();
-            
+            UpdateShiftKey();
         }
 
         #endregion
@@ -87,7 +88,10 @@ namespace UGG.Move
 
 
         #region 条件
-
+        public bool IsRun()
+        {
+            return characterAnimator.GetFloat(runID)>0.9f;
+        }
         private bool CanMoveContro()
         {
             return isOnGround && characterAnimator.CheckAnimationTag("Motion") || characterAnimator.CheckAnimationTag("CrouchMotion");
@@ -168,22 +172,105 @@ namespace UGG.Move
 
         private void UpdateMotionAnimation()
         {
-characterAnimator.SetBool(OnGroundID,isOnGround);
-            if (CanRunControl())
+            if(!characterAnimator.CheckAnimationTag("Motion"))
             {
-                characterAnimator.SetFloat(movementID,_inputSystem.playerMovement.sqrMagnitude *((_inputSystem.playerRun && !isOnCrouch) ? 2f : 1f),0.25f,Time.deltaTime);
+                return;
+            }
+             //设置是否在地面
+            characterAnimator.SetBool(OnGroundID,isOnGround);
+            if(_inputSystem.playerRun)
+            {
+           characterAnimator.SetFloat(horizontalID,_inputSystem.playerMovement.x,0.01f,Time.deltaTime);
+           characterAnimator.SetFloat(verticalID,_inputSystem.playerMovement.y,0.01f,Time.deltaTime);
+            }
+            else
+            {
+           characterAnimator.SetFloat(horizontalID,_inputSystem.playerMovement.x,0.05f,Time.deltaTime);
+           characterAnimator.SetFloat(verticalID,_inputSystem.playerMovement.y,0.05f,Time.deltaTime);
+            }
+           
+
+
+              //如果锁定了目标
+              if(characterAnimator.GetFloat(lockOnID)>0.1f&&!isOutOfTarget)
+              {
+               
+                 characterAnimator.SetFloat(movementID,0f,0.05f,Time.deltaTime);
+                 characterCurrentMoveSpeed = 0f;
+                //设置移动
+                 transform.root.rotation=transform.LockOnTarget(TargerTrans,transform.root.transform,50f);
+               
+                float totalSpeed;
+                 if (_inputSystem.playerRun)
+                 {
+                    if(Mathf.Abs(characterAnimator.GetFloat(horizontalID))>0.1f)
+                    {
+                       totalSpeed=runSpeed/1.5f;
+                    } 
+                        if(characterAnimator.GetFloat(verticalID)<0f)
+                        {
+                            totalSpeed=runSpeed/1.5f;
+                        }
+                        else
+                        {
+                          totalSpeed=runSpeed;
+                        }
+                       
+                    
+                  
+               characterAnimator.SetFloat(runID,1f,0.05f,Time.deltaTime);
+   
+                 }
+                 else
+                 {
+                    totalSpeed=walkSpeed;
+  characterAnimator.SetFloat(runID,0f,0.05f,Time.deltaTime);
+                 }
+
+ CharacterMoveInterface(transform.right*_inputSystem.playerMovement.x+transform.forward*_inputSystem.playerMovement.y,totalSpeed, true);
+                 
+              }
+             else
+             {
+                  if(characterAnimator.GetFloat(lockOnID)>0.9f)
+                {
+                 isOutOfTarget=false;   
+                }
+                 if(characterAnimator.GetFloat(lockOnID)<0.1f)
+                {
+                    isOutOfTarget=true;
+                }
+
+              
+  if (CanRunControl())
+            {
                 
+                characterAnimator.SetFloat(movementID,_inputSystem.playerMovement.sqrMagnitude *((_inputSystem.playerRun && !isOnCrouch) ? 2f : 1f),0.05f,Time.deltaTime);
                 characterCurrentMoveSpeed = (_inputSystem.playerRun && !isOnCrouch) ? runSpeed : walkSpeed;
             }
             else
             {
                 characterAnimator.SetFloat(movementID,0f,0.05f,Time.deltaTime);
+               
                 characterCurrentMoveSpeed = 0f;
             }
+             characterAnimator.SetFloat(runID, (_inputSystem.playerRun && !isOnCrouch) ? 1f : 0f);
+              
+             }
+           
           
-            characterAnimator.SetFloat(runID, (_inputSystem.playerRun && !isOnCrouch) ? 1f : 0f);
         }
-
+        private void UpdateShiftKey()
+        {
+if(_inputSystem.playerRun)
+{
+    characterAnimator.SetBool(shiftID,true);
+}
+else
+{
+    characterAnimator.SetBool(shiftID,false);
+}
+        }
         private void UpdateCrouchAnimation()
         {
             if (isOnCrouch)
@@ -202,6 +289,15 @@ characterAnimator.SetBool(OnGroundID,isOnGround);
              //调用移动函数
              if(characterAnimator.CheckAnimationTag("Roll"))
              {
+                if(TargerTrans!=null&&!isOutOfTarget)
+                {
+                transform.root.rotation=transform.LockOnTarget(TargerTrans,transform.root.transform,50f);
+                }
+              
+               characterAnimator.SetFloat(movementID,0f);
+               characterAnimator.SetFloat(horizontalID,0f);
+               characterAnimator.SetFloat(verticalID,0f);
+               Debug.LogWarning(characterAnimator.GetFloat(animationMoveID));
                CharacterMoveInterface(transform.forward,characterAnimator.GetFloat(animationMoveID)*animationMoveSpeedMult,false);
              }
              

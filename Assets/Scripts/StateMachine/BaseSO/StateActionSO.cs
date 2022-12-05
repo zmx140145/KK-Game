@@ -7,17 +7,18 @@ using UGG.Health;
 
 public abstract class StateActionSO : ScriptableObject
 {
-    //引用
+    //锟斤拷锟斤拷
     protected AICombatSystem _combatSystem;
     protected AIMovement _movement;
     protected AIHealthSystem _healthSystem;
     protected Animator _animator;
     protected Transform self;
 
-    [SerializeField, Header("状态优先级")] protected int statePriority;//状态优先级
+    [SerializeField, Header("鐘舵�佷紭鍏堢骇")] protected int statePriority;
 
 
     //animationID
+       protected int lockOnID = Animator.StringToHash("LockOn");
     protected int animationMoveID = Animator.StringToHash("AnimationMove");
     protected int movementID = Animator.StringToHash("Movement");
     protected int horizontalID = Animator.StringToHash("Horizontal");
@@ -25,7 +26,7 @@ public abstract class StateActionSO : ScriptableObject
     protected int lAtkID = Animator.StringToHash("LAtk");
     protected int runID = Animator.StringToHash("Run");
 
-    //移动速度
+    //锟狡讹拷锟劫讹拷
     protected float walkSpeed = 1.5f;
     protected float runSpeed = 5f;
     [SerializeField] protected float currentMoveSpeed;
@@ -71,7 +72,7 @@ public abstract class StateActionSO : ScriptableObject
     public virtual void OnExit() { }
 
     /// <summary>
-    /// 获取状态优先级
+    /// 锟斤拷取状态锟斤拷锟饺硷拷
     /// </summary>
     /// <returns></returns>
     public int GetStatePriority() => statePriority;

@@ -7,7 +7,22 @@ using UnityEngine.InputSystem;
 public class CharacterInputSystem : MonoBehaviour
 {
     private InputController _inputController;
+  //内部函数
+    private void Awake()
+    {
+        if (_inputController == null)
+            _inputController = new InputController();
+    }
 
+    private void OnEnable()
+    {
+        _inputController.Enable();
+    }
+
+    private void OnDisable()
+    {
+        _inputController.Disable();
+    }
 
     //Key Setting
     public Vector2 playerMovement
@@ -36,7 +51,7 @@ public class CharacterInputSystem : MonoBehaviour
     }
     public bool playerDefen
     {
-        get => _inputController.PlayerInput.Defen.phase == InputActionPhase.Performed;
+        get => _inputController.PlayerInput.Defen.IsPressed();
     }
 
     public bool playerRun
@@ -64,22 +79,7 @@ public class CharacterInputSystem : MonoBehaviour
     
     
     
-    //内部函数
-    private void Awake()
-    {
-        if (_inputController == null)
-            _inputController = new InputController();
-    }
-
-    private void OnEnable()
-    {
-        _inputController.Enable();
-    }
-
-    private void OnDisable()
-    {
-        _inputController.Disable();
-    }
+  
     
 
 

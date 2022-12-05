@@ -120,6 +120,7 @@ public class NB_Transition : ScriptableObject
             stateMachineSystem.currentState.OnExit();
             stateMachineSystem.currentState = toState;
             stateMachineSystem.currentState.OnEnter();
+            
             toStates.Clear();
             conditionPriority = 0;
             statePriority = 0;

@@ -9,7 +9,7 @@ namespace UGG.Move
     {
         //引用
         protected Animator characterAnimator;
-        protected CharacterController control;
+       [HideInInspector] public CharacterController control;
         protected CharacterInputSystem _inputSystem;
         
         //MoveDirection(移动向量)
@@ -34,6 +34,7 @@ namespace UGG.Move
         
         
         //AnimationID
+             protected int lockOnID = Animator.StringToHash("LockOn");
         protected int animationMoveID = Animator.StringToHash("AnimationMove");
           protected int animationJumpID = Animator.StringToHash("AnimationJump");
         protected int movementID = Animator.StringToHash("Movement");

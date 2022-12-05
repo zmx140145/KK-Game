@@ -1,0 +1,75 @@
+ //AI战斗状态，各自战斗相关的逻辑就会在这个状态来处理
+    
+
+    
+    private int randomHorizontal;
+
+    
+
+    public override void OnEnter()
+    {
+        
+    }
+
+    public override void OnUpdate()
+    {
+
+        NoCombatMove();
+
+    }
+
+    public override void OnExit()
+    {
+
+    }
+
+
+
+
+    private void NoCombatMove()
+    {
+        if (_animator.CheckAnimationTag("Motion"))
+        {
+            if (_combatSystem.GetCurrentTargetDistance() < 2f + .1f )
+            {
+                _movement.CharacterMoveInterface(-_combatSystem.GetDirectionForTarget(), 1.4f, true);
+                _animator.SetFloat(verticalID, -1f, 0.25f, Time.deltaTime);
+                _animator.SetFloat(horizontalID, 0f, 0.25f, Time.deltaTime);
+                
+                randomHorizontal = GetRandomHorizontal();
+
+                if (_combatSystem.GetCurrentTargetDistance() < 1.5 + .05f)
+                {
+                    if (!_animator.CheckAnimationTag("Hit") || !_animator.CheckAnimationTag("Defen"))
+                    {
+                        //TODO:待添加
+                    }
+                }
+            }
+            else if (_combatSystem.GetCurrentTargetDistance() > 2f + .1f && _combatSystem.GetCurrentTargetDistance()< 6.1 + .5f)
+            {
+                _movement.CharacterMoveInterface(_movement.transform.right * ((randomHorizontal == 0) ? 1 : randomHorizontal), 1.4f, true);
+                _animator.SetFloat(verticalID, 0f,0.25f, Time.deltaTime);
+                _animator.SetFloat(horizontalID, ((randomHorizontal == 0) ? 1 : randomHorizontal), 0.25f, Time.deltaTime);
+            }
+            else if (_combatSystem.GetCurrentTargetDistance() > 6.1 + .5f)
+            {
+                _movement.CharacterMoveInterface(_movement.transform.forward, 1.4f, true);
+                _animator.SetFloat(verticalID, 1f, 0.25f, Time.deltaTime);
+                _animator.SetFloat(horizontalID, 0f, 0.25f, Time.deltaTime);
+              
+            }
+           
+            
+            
+        }
+        else
+        {
+            _animator.SetFloat(verticalID, 0f);
+            _animator.SetFloat(horizontalID, 0f);
+            _animator.SetFloat(runID, 0f);
+        }
+    }
+
+    private int GetRandomHorizontal() => Random.Range(-1, 2);
+    

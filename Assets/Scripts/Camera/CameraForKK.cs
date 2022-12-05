@@ -134,13 +134,13 @@ else
 
 
 
-   private void OnDrawGizmos() {
-       Vector3 toCenter=(Target.position+Player.position)/2f-transform.position;
-      Vector3 toUL=m_camera.ViewportToWorldPoint(new Vector3(0,0,toCenter.magnitude));
-       Vector3 toDR=m_camera.ViewportToWorldPoint(new Vector3(1 ,1,toCenter.magnitude));
-       Gizmos.color=Color.blue;
-      Gizmos.DrawLine(transform.root.position,toUL);
-       Gizmos.DrawLine(transform.root.position,toDR);
+   // private void OnDrawGizmos() {
+   //     Vector3 toCenter=(Target.position+Player.position)/2f-transform.position;
+   //    Vector3 toUL=m_camera.ViewportToWorldPoint(new Vector3(0,0,toCenter.magnitude));
+   //     Vector3 toDR=m_camera.ViewportToWorldPoint(new Vector3(1 ,1,toCenter.magnitude));
+   //     Gizmos.color=Color.blue;
+   //    Gizmos.DrawLine(transform.root.position,toUL);
+   //     Gizmos.DrawLine(transform.root.position,toDR);
 
-   }
+   // }
 }

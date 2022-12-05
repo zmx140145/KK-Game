@@ -8,6 +8,22 @@ namespace UGG.Combat
 {
     public abstract class CharacterCombatSystemBase : MonoBehaviour
     {
+
+          [SerializeField] protected Transform currentTarget;
+        private bool canExecute;
+        //设置是否可以被处决
+        public bool CanExecute
+        {
+      get
+      {
+        return canExecute;
+      }
+      set
+      {
+        canExecute=value;
+      }
+        }
+        public UI_Health ui_Health;
         protected Animator _animator;
         protected CharacterInputSystem _characterInputSystem;
         protected CharacterMovementBase _characterMovementBase;
@@ -15,9 +31,11 @@ namespace UGG.Combat
         
         
         //aniamtionID
+        protected int executeID=Animator.StringToHash("Execute");
+                protected int lockOnID = Animator.StringToHash("LockOn");
         protected int lAtkID = Animator.StringToHash("LAtk");
         protected int rAtkID = Animator.StringToHash("RAtk");
-        protected int defenID = Animator.StringToHash("Defen");
+        protected int defenID = Animator.StringToHash("Parry");
         protected int animationMoveID = Animator.StringToHash("AnimationMove");
         protected int sWeaponID=Animator.StringToHash("SWeapon");
         //攻击检测
@@ -32,14 +50,45 @@ namespace UGG.Combat
             _characterMovementBase = GetComponentInParent<CharacterMovementBase>();
             _audioSource = _characterMovementBase.GetComponentInChildren<AudioSource>();
         }
+public Transform GetCurrentTarget()
+{
+   if(currentTarget==null)
+   {
+      return null;
+   }
+   return currentTarget;
+}
 
+public float GetCurrentTargetDistance()
+{
+    if(currentTarget)
+    {
+    return Vector3.Distance(currentTarget.position,transform.root.position);
+    }
+    else{
+        Debug.LogWarning("空对象");
+        return 0f;
+        
+    }
+}
+public Vector3 GetDirectionForTarget()
+{
+    if(currentTarget)
+    {
+    return(currentTarget.position-transform.root.position).normalized;
+    }
+    else
+    {
+         Debug.LogWarning("空对象");
+        return Vector3.zero;
+    }
+   
+}
         protected virtual void OnAnimationAttackParticleEvent(int angle)
         {
-            Script_ATK obj= GameObject.Find("Player").GetComponent<Script_ATK>();
-            obj.SetRotationAndPlay(angle);
-                
+          
         }
-
+       
 
 
         /// <summary>
@@ -56,7 +105,7 @@ namespace UGG.Combat
             // else if(hitName == "Hit_D_Top")
             //     GameObject.Find("Player").GetComponent<Script_ATK3>().playKnifeLight();
 
-
+            
             Collider[] attackDetectionTargets = new Collider[4];
 
             int counts = Physics.OverlapSphereNonAlloc(attackDetectionCenter.position, attackDetectionRang,
@@ -68,7 +117,7 @@ namespace UGG.Combat
                 {
                     if (attackDetectionTargets[i].TryGetComponent(out IDamagar damagar))
                     {
-                        damagar.TakeDamager(0f,hitName,transform.root.transform);
+                        damagar.TakeDamager(5f,hitName,transform.root.transform);
                         
                     }
                 }

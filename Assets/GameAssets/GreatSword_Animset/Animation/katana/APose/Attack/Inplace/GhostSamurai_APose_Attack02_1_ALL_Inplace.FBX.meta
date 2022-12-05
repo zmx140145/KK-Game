@@ -640,7 +640,7 @@ ModelImporter:
           postInfinity: 3
           rotationOrder: 4
       events:
-      - time: 0.08201891
+      - time: 0.20360701
         functionName: OnAnimationAttackParticleEvent
         data: 
         objectReferenceParameter: {instanceID: 0}

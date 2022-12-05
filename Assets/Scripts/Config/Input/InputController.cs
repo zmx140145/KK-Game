@@ -254,7 +254,7 @@ public partial class @InputController : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""34a918b4-76de-4ed4-af5f-dde069508a87"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Keyboard>/h"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
